@@ -15,7 +15,7 @@ Suggested usage
 
 Changelog
 ---------
-{2} v0.1 - Created project
+    {2} v0.1 - Created project
 
 
 Notes

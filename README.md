@@ -10,7 +10,7 @@ Creates a simple setup folder for a new project.
 
     | ProjectName/
     |---> LICENSE.txt
-        | README.txt
+        | README.md
         | setup.py
         | .gitignore    <-- (optional, ignores *.pyc)
         | projectname/
@@ -29,7 +29,7 @@ Suggested usage
 
 Changelog
 ---------
-20120409 v0.1 - Created project 
+    20120409 v0.1 - Created project 
 
 Notes
 -----
