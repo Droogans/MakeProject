@@ -5,5 +5,5 @@ setup(
     version='0.1',
     packages=['makeproject',],
     license=open('LISCENSE.txt').read(),
-    long_description=open('README.txt').read(),
+    long_description=open('README.md').read(),
 )
