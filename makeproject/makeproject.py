@@ -1,4 +1,3 @@
-
 #! usr/bin/env python
 """
 Creates a simple setup folder for a new project.
