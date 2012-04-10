@@ -65,7 +65,6 @@ class NewProject(object):
 
     def buildfile(self, name, content, directory = ""):
         """opens and creates a new file at `directory` with `contents`"""
-        #assumes bad directories have been purified
 
         if directory:
             directory = os.sep.join([directory, name])
@@ -76,9 +75,6 @@ class NewProject(object):
             
         w.write(content)
         w.close()
-        
-        
-#end class NewProject
 
         
 def check_build_path(loc):
