@@ -1,3 +1,4 @@
+
 #! usr/bin/env python
 """
 Creates a simple setup folder for a new project.
@@ -47,7 +48,7 @@ class NewProject(object):
     def newproject(self):
         """creates a file structure for a new project at `directory`"""
         
-        self.path = os.sep.join(self.base, self.name)
+        self.path = os.path.join(self.base, self.name)
         
         sub = self.name.lower()
         subpath = os.sep.join([self.path, sub])
@@ -100,8 +101,9 @@ if __name__ == '__main__':
                         required=False, type=str, default=__file__,
                         help='directory to deploy project, default to cwd')
     parser.add_argument('-g', dest='use_git', action='store_true',
-                        default=False, help='create a .gitignore file')
-    parser.add_argument('--version', action='version', version='%(prog)s 0.1',
+                        default=False, help='create a .gitignore file, *.pyc')
+    parser.add_argument('-v', '--version', action='version',
+                        version='%(prog)s 0.1',
                         help='print the module and version, then quit')
     args = vars(parser.parse_args())
     project = NewProject(**args)
