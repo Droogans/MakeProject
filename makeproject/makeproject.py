@@ -9,9 +9,9 @@ Creates a simple setup folder for a new project.
 
     | ProjectName/
     |---> LICENSE.txt
-        | README.txt
+        | README.md
         | setup.py
-        | .gitignore    <-- (optional, ignore *.pyc)
+        | .gitignore    <-- (optional, ignores *.pyc)
         | projectname/
         | ---> __init__.py
 
@@ -21,31 +21,33 @@ For the sake of best practices, __init__.py is left empty.
 import sys, os, errno, argparse, datetime
 
 class NewProject(object):
-    
     """interface for building a directory with a new project in it"""
     
     def __init__(self, projectname, directory, use_git=False):
         self.project = projectname
         self.name    = projectname.replace(' ', '')
-        self.base = os.path.abspath(directory)
-        #project defaults
+        self.base    = os.path.abspath(directory)
+        
+        #defaults
         self.git = use_git
-        readme = open('readme_template.txt', 'r').read()
+        readme            = open('readme_template.txt',   'r').read()
         standard_liscense = open('standard_liscense.txt', 'r').read()
-        setup = open('setup_template.txt', 'r').read()
+        setup             = open('setup_template.txt',    'r').read()
+
         self.files = {
-            'README.txt' :
-            readme.format(self.project, '=' * len(self.project),
-                          datetime.date.today().strftime("%Y%m%d")),
+            'README.md' :
+            readme.format(self.project,
+                          '=' * len(self.project),
+                          datetime.date.today().strftime("%Y%m%d")
+                          ),
             'LISCENSE.txt' : standard_liscense,
-            'setup.py': setup.format(self.project, self.name.lower())
+            'setup.py' : setup.format(self.project, self.name.lower())
             }        
 
     def newproject(self):
-        
         """creates a file structure for a new project at `directory`"""
         
-        self.path = os.sep.join([self.base, self.name])
+        self.path = os.sep.join(self.base, self.name)
         
         sub = self.name.lower()
         subpath = os.sep.join([self.path, sub])
@@ -62,16 +64,15 @@ class NewProject(object):
             
 
     def buildfile(self, name, content, directory = ""):
-        
         """opens and creates a new file at `directory` with `contents`"""
         #assumes bad directories have been purified
 
-        if directory == "":
-            loc = os.sep.join([self.path, name])
-            w = open(loc, 'w')
-        else:
+        if directory:
             directory = os.sep.join([directory, name])
             w = open(directory, 'w')
+        else:
+            loc = os.sep.join([self.path, name])
+            w = open(loc, 'w')
             
         w.write(content)
         w.close()
@@ -79,19 +80,17 @@ class NewProject(object):
         
 #end class NewProject
 
-
         
 def check_build_path(loc):
-    d = os.path.normpath(loc)
-    if not os.path.exists(d):
-        os.makedirs(d)
+    directory = os.path.normpath(loc)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
     else:
         try:
-            os.rmdir(d)
+            os.rmdir(directory)
         except OSError as ex:
             if ex.errno == errno.ENOTEMPTY:
                 raise OSError("Directory specified must be new or empty")
-        #if delete was successful, build the directory
         check_build_path(loc)
         
 
