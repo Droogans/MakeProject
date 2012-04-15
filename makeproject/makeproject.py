@@ -23,13 +23,13 @@ import sys, os, errno, argparse, datetime
 class NewProject(object):
     """interface for building a directory with a new project in it"""
     
-    def __init__(self, projectname, directory, use_git=False):
+    def __init__(self, projectname, directory, use_git=False, use_db=False):
         self.project = projectname
         self.name    = projectname.replace(' ', '')
         self.base    = os.path.abspath(directory)
         
         #defaults
-        self.git = use_git
+        self.git, self.db = use_git, use_db
         readme            = open('readme_template.txt',   'r').read()
         standard_liscense = open('standard_liscense.txt', 'r').read()
         setup             = open('setup_template.txt',    'r').read()
@@ -49,19 +49,23 @@ class NewProject(object):
         
         self.path = os.path.join(self.base, self.name)
         
-        sub = self.name.lower()
-        subpath = os.sep.join([self.path, sub])
+        sub = self.name.lower() 
+        subpath  = os.sep.join([self.path, sub])
+        datapath = os.sep.join([self.base, 'data'])
 
+        os.makedirs(os.path.join(self.base, 'tests'))
         check_build_path(subpath)
         
         for filename, content in self.files.items():
             self.buildfile(filename, content, directory=self.path)
             
-        self.buildfile('__init__.py', content='', directory=subpath)
+        self.buildfile('__init__.py', '', directory=subpath)
         
         if self.git:
-            self.buildfile('.gitignore', content='*.pyc', directory=self.path)
-            
+            self.buildfile('.gitignore', '*.pyc', directory=self.path)
+        if self.db:
+            os.makedirs(os.path.join(self.base, 'data'))
+            self.buildfile('{0}.db'.format(self.name.lower()), '', datapath)
 
     def buildfile(self, name, content, directory = ""):
         """opens and creates a new file at `directory` with `contents`"""
@@ -101,6 +105,8 @@ if __name__ == '__main__':
                         help='directory to deploy project, default to cwd')
     parser.add_argument('-g', dest='use_git', action='store_true',
                         default=False, help='create a .gitignore file, *.pyc')
+    parser.add_argument('-b', dest='use_db', action='store_true',
+                        default=False, help='create a data directory with .db')
     parser.add_argument('-v', '--version', action='version',
                         version='%(prog)s 0.1',
                         help='print the module and version, then quit')
