@@ -26,13 +26,14 @@ class NewProject(object):
     def __init__(self, projectname, directory, use_git=False, use_db=False):
         self.project = projectname
         self.name    = projectname.replace(' ', '')
+        self.lowname = self.name.lower()
         self.base    = os.path.abspath(directory)
         
         #defaults
         self.git, self.db = use_git, use_db
-        readme            = open('readme_template.txt',   'r').read()
-        standard_liscense = open('standard_liscense.txt', 'r').read()
-        setup             = open('setup_template.txt',    'r').read()
+        readme   = open('readme_template.txt'  , 'r').read()
+        liscense = open('standard_liscense.txt', 'r').read()
+        setup    = open('setup_template.txt'   , 'r').read()
 
         self.files = {
             'README.md' :
@@ -40,31 +41,33 @@ class NewProject(object):
                           '=' * len(self.project),
                           datetime.date.today().strftime("%Y%m%d")
                           ),
-            'LISCENSE.txt' : standard_liscense,
-            'setup.py' : setup.format(self.project, self.name.lower())
+            'LISCENSE.txt' : liscense,
+            'setup.py' : setup.format(self.project, self.lowname),
             }        
 
     def newproject(self):
         """creates a file structure for a new project at `directory`"""
         
         self.path = os.path.join(self.base, self.name)
+ 
+        subpath  = os.sep.join([self.path, self.lowname])
+        testpath = os.sep.join([self.path, 'tests'])
+        os.makedirs(testpath)
         
-        sub = self.name.lower() 
-        subpath  = os.sep.join([self.path, sub])
-        datapath = os.sep.join([self.base, 'data'])
-
-        os.makedirs(os.path.join(self.base, 'tests'))
         check_build_path(subpath)
         
         for filename, content in self.files.items():
             self.buildfile(filename, content, directory=self.path)
-            
-        self.buildfile('__init__.py', '', directory=subpath)
+
+        script = open('firstscript.txt', 'r').read().format(self.lowname)
+        self.buildfile('{0}.py'.format(self.lowname), script, subpath) 
+        self.buildfile('__init__.py', '', subpath)
         
         if self.git:
             self.buildfile('.gitignore', '*.pyc', directory=self.path)
         if self.db:
-            os.makedirs(os.path.join(self.base, 'data'))
+            datapath = os.sep.join([self.path, 'data'])
+            os.makedirs(datapath)
             self.buildfile('{0}.db'.format(self.name.lower()), '', datapath)
 
     def buildfile(self, name, content, directory = ""):
@@ -101,8 +104,8 @@ if __name__ == '__main__':
     parser.add_argument('projectname', type=str,
                         help='project name')
     parser.add_argument('-d', dest='directory',
-                        required=False, type=str, default=__file__,
-                        help='directory to deploy project, default to cwd')
+                        required=False, type=str,
+                        help='directory to deploy project, relative accepted')
     parser.add_argument('-g', dest='use_git', action='store_true',
                         default=False, help='create a .gitignore file, *.pyc')
     parser.add_argument('-b', dest='use_db', action='store_true',

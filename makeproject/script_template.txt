@@ -1,0 +1,7 @@
+#!/usr/bin/env python
+
+"""{0} main module"""
+
+def {0}():
+    """return main function {0}"""
+    pass
