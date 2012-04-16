@@ -1,6 +1,7 @@
 MakeProject
 ===========
 
+"""
 Creates a simple setup folder for a new project.
 
     Follows the guide posted at:
@@ -12,11 +13,17 @@ Creates a simple setup folder for a new project.
     |---> LICENSE.txt
         | README.md
         | setup.py
-        | .gitignore    <-- (optional, ignores *.pyc)
+        | .gitignore              <-- (optional, ignores *.pyc)
+        | data/                   <-- (optional, sqlite3)
+            | ---> projectname.db
         | projectname/
-        | ---> __init__.py
+            | ---> __init__.py
+            | ---> projectname.py
+        | tests/                  <-- (optional, highly recommended)
+            | ---> __init__.py
 
-For the sake of best practices, `__init__.py` is left empty.
+For the sake of best practices, all __init__.py files are left empty.
+"""
 
 Requirements
 ------------
@@ -25,11 +32,12 @@ Python v2.7
 Suggested usage
 ---------------
 
-    >$ python -m makeproject MakeProject -gd /home/user/py/
+    >$ python -m makeproject ProjectName -gbtd /home/user/py/
 
 Changelog
 ---------
-    20120409 v0.1 - Created project 
+    20120409 v0.1 - Created project
+    20120416 v0.1 - sqlite3 database, tests directory options
 
 Notes
 -----
