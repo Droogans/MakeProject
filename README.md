@@ -1,7 +1,6 @@
 MakeProject
 ===========
 
-"""
 Creates a simple setup folder for a new project.
 
     Follows the guide posted at:
@@ -22,8 +21,7 @@ Creates a simple setup folder for a new project.
         | tests/                  <-- (optional, highly recommended)
             | ---> __init__.py
 
-For the sake of best practices, all __init__.py files are left empty.
-"""
+For the sake of best practices, all `__init__.py` files are left empty.
 
 Requirements
 ------------
